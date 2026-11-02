@@ -1,0 +1,586 @@
+/* ============================================
+   EscapeX — Stylesheet
+   Clean, minimal CSS. No frameworks.
+   Color scheme: blues, greens, grays
+   ============================================ */
+
+/* ---- RESET & BASE ---- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0f1923;
+    color: #e0e0e0;
+    min-height: 100vh;
+}
+
+/* ---- SCREEN MANAGEMENT ---- */
+.screen {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ============================================
+   START SCREEN
+   ============================================ */
+.start-container {
+    text-align: center;
+    max-width: 520px;
+    padding: 40px;
+    background: #1a2733;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.game-title {
+    font-size: 3rem;
+    color: #4fc3f7;
+    margin-bottom: 8px;
+}
+
+.game-subtitle {
+    font-size: 1.1rem;
+    color: #90a4ae;
+    margin-bottom: 24px;
+}
+
+.game-description {
+    text-align: left;
+    background: #223344;
+    padding: 16px 20px;
+    border-radius: 10px;
+    margin-bottom: 24px;
+    line-height: 1.6;
+}
+
+.game-description p {
+    margin-bottom: 10px;
+}
+
+.game-description ul {
+    list-style: none;
+    padding: 0;
+}
+
+.game-description li {
+    padding: 3px 0;
+    font-size: 0.95rem;
+}
+
+.timer-selection {
+    margin-bottom: 24px;
+}
+
+.timer-selection label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    color: #b0bec5;
+}
+
+.timer-selection select {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 2px solid #37474f;
+    background: #263238;
+    color: #e0e0e0;
+    cursor: pointer;
+    outline: none;
+}
+
+.timer-selection select:focus {
+    border-color: #4fc3f7;
+}
+
+#start-btn {
+    padding: 14px 48px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #4fc3f7, #0288d1);
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(79, 195, 247, 0.4);
+}
+
+/* ============================================
+   GAME SCREEN — HEADER
+   ============================================ */
+#header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    background: #1a2733;
+    border-bottom: 2px solid #263238;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
+#timer {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #4fc3f7;
+    min-width: 120px;
+}
+
+#timer.warning {
+    color: #ff9800;
+    animation: pulse 1s infinite;
+}
+
+#timer.danger {
+    color: #f44336;
+    animation: pulse 0.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+#game-title-bar {
+    font-size: 1.2rem;
+    color: #78909c;
+}
+
+#score {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #66bb6a;
+    min-width: 140px;
+    text-align: right;
+}
+
+/* ============================================
+   GAME SCREEN — MAIN AREA
+   ============================================ */
+#game-screen {
+    display: none;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+#game-area {
+    display: flex;
+    gap: 24px;
+    padding: 80px 24px 24px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+    min-height: calc(100vh - 56px);
+}
+
+/* ============================================
+   ROOM MAP (3x3 Grid)
+   ============================================ */
+#room-map {
+    flex: 0 0 380px;
+}
+
+#room-map h3 {
+    margin-bottom: 12px;
+    color: #90a4ae;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.map-grid {
+    display: grid;
+    grid-template-columns: 1fr 20px 1fr 20px 1fr;
+    grid-template-rows: auto 16px auto 16px auto;
+    gap: 0;
+    align-items: center;
+    justify-items: center;
+}
+
+/* ---- Room Cards ---- */
+.room {
+    width: 100%;
+    padding: 12px 8px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: not-allowed;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-height: 80px;
+    justify-content: center;
+}
+
+.room-number {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.room-name {
+    font-size: 0.7rem;
+    opacity: 0.8;
+}
+
+.room-difficulty {
+    font-size: 0.65rem;
+    margin-top: 2px;
+}
+
+/* Room States */
+.room.locked {
+    background: #37474f;
+    color: #78909c;
+    border-color: #455a64;
+}
+
+.room.unlocked {
+    background: #0d47a1;
+    color: #e3f2fd;
+    border-color: #1565c0;
+    cursor: pointer;
+}
+
+.room.unlocked:hover {
+    background: #1565c0;
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(21, 101, 192, 0.5);
+}
+
+.room.completed {
+    background: #2e7d32;
+    color: #c8e6c9;
+    border-color: #388e3c;
+    cursor: default;
+}
+
+.room.current {
+    border-color: #ff9800 !important;
+    box-shadow: 0 0 16px rgba(255, 152, 0, 0.5);
+}
+
+/* ---- Connectors (lines between rooms) ---- */
+.room-connector.horizontal {
+    width: 100%;
+    height: 3px;
+    background: #455a64;
+    border-radius: 2px;
+}
+
+.room-connector.vertical {
+    width: 3px;
+    height: 16px;
+    background: #455a64;
+    border-radius: 2px;
+    justify-self: center;
+}
+
+.connector-spacer {
+    width: 100%;
+    height: 16px;
+}
+
+/* ============================================
+   PUZZLE AREA
+   ============================================ */
+#puzzle-area {
+    flex: 1;
+    background: #1a2733;
+    border-radius: 12px;
+    padding: 24px;
+    min-height: 400px;
+}
+
+#puzzle-default {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    color: #78909c;
+    text-align: center;
+}
+
+#puzzle-default h3 {
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+}
+
+/* Puzzle Header */
+#puzzle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #37474f;
+}
+
+#puzzle-room-name {
+    font-size: 1.1rem;
+    color: #4fc3f7;
+    font-weight: bold;
+}
+
+#puzzle-points {
+    font-size: 1rem;
+    color: #66bb6a;
+    font-weight: bold;
+    background: #1b5e20;
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+/* Question */
+#question-text {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    color: #eceff1;
+}
+
+/* Answer Options */
+#options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.option-btn {
+    padding: 14px 20px;
+    font-size: 1rem;
+    border: 2px solid #37474f;
+    border-radius: 10px;
+    background: #263238;
+    color: #e0e0e0;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+}
+
+.option-btn:hover {
+    border-color: #4fc3f7;
+    background: #1a3a4a;
+}
+
+.option-btn.correct {
+    border-color: #4caf50;
+    background: #1b5e20;
+    color: #c8e6c9;
+}
+
+.option-btn.wrong {
+    border-color: #f44336;
+    background: #b71c1c;
+    color: #ffcdd2;
+}
+
+/* Option labels (A, B, C, D) */
+.option-label {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    border-radius: 50%;
+    background: #455a64;
+    color: #eceff1;
+    font-weight: bold;
+    margin-right: 12px;
+    font-size: 0.85rem;
+}
+
+/* Hint Button */
+#hint-btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    border: 1px solid #37474f;
+    border-radius: 8px;
+    background: transparent;
+    color: #ffb74d;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#hint-btn:hover {
+    background: #37474f;
+}
+
+#hint-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* Hint Text */
+#hint-text {
+    margin-top: 12px;
+    padding: 12px 16px;
+    background: #2e3b44;
+    border-left: 3px solid #ffb74d;
+    border-radius: 0 8px 8px 0;
+    color: #ffcc80;
+    font-style: italic;
+}
+
+/* Feedback Message */
+#feedback {
+    margin-top: 16px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 1rem;
+    text-align: center;
+}
+
+#feedback.success {
+    background: #1b5e20;
+    color: #a5d6a7;
+    border: 1px solid #388e3c;
+}
+
+#feedback.error {
+    background: #b71c1c;
+    color: #ef9a9a;
+    border: 1px solid #d32f2f;
+}
+
+/* Completed Room View */
+#puzzle-completed {
+    text-align: center;
+    padding-top: 40px;
+    color: #a5d6a7;
+}
+
+#puzzle-completed h3 {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+}
+
+/* ============================================
+   RESULT SCREEN
+   ============================================ */
+.result-container {
+    text-align: center;
+    max-width: 560px;
+    padding: 40px;
+    background: #1a2733;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.result-container h1 {
+    font-size: 2.5rem;
+    color: #4fc3f7;
+    margin-bottom: 24px;
+}
+
+#result-summary {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 28px;
+    gap: 16px;
+}
+
+.result-stat {
+    background: #223344;
+    padding: 16px 20px;
+    border-radius: 10px;
+    flex: 1;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.8rem;
+    color: #78909c;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #4fc3f7;
+}
+
+.result-container h3 {
+    margin-bottom: 16px;
+    color: #90a4ae;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* History Items */
+#history-list {
+    text-align: left;
+    margin-bottom: 28px;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: #223344;
+    border-radius: 8px;
+    margin-bottom: 6px;
+}
+
+.history-item .history-order {
+    font-size: 0.85rem;
+    color: #78909c;
+    min-width: 30px;
+}
+
+.history-item .history-name {
+    flex: 1;
+    color: #e0e0e0;
+    margin-left: 8px;
+}
+
+.history-item .history-score {
+    font-weight: bold;
+    color: #66bb6a;
+}
+
+.history-empty {
+    color: #78909c;
+    font-style: italic;
+    padding: 20px;
+}
+
+#replay-btn {
+    padding: 14px 48px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #4fc3f7, #0288d1);
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#replay-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(79, 195, 247, 0.4);
+}

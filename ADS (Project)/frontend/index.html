@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EscapeX - Escape Room Puzzle Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ============================================ -->
+    <!-- SCREEN 1: START SCREEN                       -->
+    <!-- ============================================ -->
+    <div id="start-screen" class="screen">
+        <div class="start-container">
+            <h1 class="game-title">&#128275; EscapeX</h1>
+            <p class="game-subtitle">Escape the rooms by solving puzzles!</p>
+
+            <div class="game-description">
+                <p>Navigate through <strong>9 interconnected rooms</strong>, solve logic puzzles, and escape before time runs out!</p>
+                <ul>
+                    <li>&#9989; Solve puzzles to unlock connected rooms</li>
+                    <li>&#9200; Wrong answers cost you <strong>5 seconds</strong></li>
+                    <li>&#128161; Use hints (costs 5 points)</li>
+                    <li>&#11088; Difficulty increases as you progress</li>
+                    <li>&#127942; Complete Room 9 for a +50 bonus!</li>
+                </ul>
+            </div>
+
+            <!-- Timer Duration Selection -->
+            <div class="timer-selection">
+                <label for="timer-select">Choose Timer Duration:</label>
+                <select id="timer-select">
+                    <option value="60">1 Minute</option>
+                    <option value="120">2 Minutes</option>
+                    <option value="180">3 Minutes</option>
+                    <option value="240">4 Minutes</option>
+                    <option value="300" selected>5 Minutes</option>
+                </select>
+            </div>
+
+            <button id="start-btn" onclick="startGame()">&#127918; Start Game</button>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SCREEN 2: GAME SCREEN                        -->
+    <!-- ============================================ -->
+    <div id="game-screen" class="screen" style="display:none;">
+
+        <!-- Top Header Bar -->
+        <div id="header">
+            <span id="timer">&#9201; 5:00</span>
+            <span id="game-title-bar">&#128275; EscapeX</span>
+            <span id="score">&#127942; Score: 0</span>
+        </div>
+
+        <!-- Main Game Area -->
+        <div id="game-area">
+
+            <!-- Left: Room Map (3x3 grid) -->
+            <div id="room-map">
+                <h3>Room Map</h3>
+                <div class="map-grid">
+                    <!-- Row 1 -->
+                    <div class="room locked" id="room-1" onclick="enterRoom(1)">
+                        <span class="room-number">1</span>
+                        <span class="room-name">The Lobby</span>
+                        <span class="room-difficulty">&#11088;</span>
+                    </div>
+                    <div class="room-connector horizontal" id="conn-1-2"></div>
+                    <div class="room locked" id="room-2" onclick="enterRoom(2)">
+                        <span class="room-number">2</span>
+                        <span class="room-name">The Library</span>
+                        <span class="room-difficulty">&#11088;</span>
+                    </div>
+                    <div class="room-connector horizontal" id="conn-2-3"></div>
+                    <div class="room locked" id="room-3" onclick="enterRoom(3)">
+                        <span class="room-number">3</span>
+                        <span class="room-name">The Lab</span>
+                        <span class="room-difficulty">&#11088;&#11088;</span>
+                    </div>
+
+                    <!-- Vertical connectors Row 1-2 -->
+                    <div class="room-connector vertical" id="conn-1-4"></div>
+                    <div class="connector-spacer"></div>
+                    <div class="room-connector vertical" id="conn-2-5"></div>
+                    <div class="connector-spacer"></div>
+                    <div class="room-connector vertical" id="conn-3-6"></div>
+
+                    <!-- Row 2 -->
+                    <div class="room locked" id="room-4" onclick="enterRoom(4)">
+                        <span class="room-number">4</span>
+                        <span class="room-name">The Workshop</span>
+                        <span class="room-difficulty">&#11088;</span>
+                    </div>
+                    <div class="room-connector horizontal" id="conn-4-5"></div>
+                    <div class="room locked" id="room-5" onclick="enterRoom(5)">
+                        <span class="room-number">5</span>
+                        <span class="room-name">The Hall</span>
+                        <span class="room-difficulty">&#11088;&#11088;</span>
+                    </div>
+                    <div class="room-connector horizontal" id="conn-5-6"></div>
+                    <div class="room locked" id="room-6" onclick="enterRoom(6)">
+                        <span class="room-number">6</span>
+                        <span class="room-name">The Vault</span>
+                        <span class="room-difficulty">&#11088;&#11088;&#11088;</span>
+                    </div>
+
+                    <!-- Vertical connectors Row 2-3 -->
+                    <div class="room-connector vertical" id="conn-4-7"></div>
+                    <div class="connector-spacer"></div>
+                    <div class="room-connector vertical" id="conn-5-8"></div>
+                    <div class="connector-spacer"></div>
+                    <div class="room-connector vertical" id="conn-6-9"></div>
+
+                    <!-- Row 3 -->
+                    <div class="room locked" id="room-7" onclick="enterRoom(7)">
+                        <span class="room-number">7</span>
+                        <span class="room-name">The Dungeon</span>
+                        <span class="room-difficulty">&#11088;&#11088;</span>
+                    </div>
+                    <div class="room-connector horizontal" id="conn-7-8"></div>
+                    <div class="room locked" id="room-8" onclick="enterRoom(8)">
+                        <span class="room-number">8</span>
+                        <span class="room-name">The Tower</span>
+                        <span class="room-difficulty">&#11088;&#11088;&#11088;</span>
+                    </div>
+                    <div class="room-connector horizontal" id="conn-8-9"></div>
+                    <div class="room locked" id="room-9" onclick="enterRoom(9)">
+                        <span class="room-number">9</span>
+                        <span class="room-name">The Escape</span>
+                        <span class="room-difficulty">&#11088;&#11088;&#11088;</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Puzzle Area -->
+            <div id="puzzle-area">
+                <!-- Default message when no room is selected -->
+                <div id="puzzle-default">
+                    <h3>&#128073; Select a room from the map</h3>
+                    <p>Click on an unlocked (blue) room to enter it and see its puzzle.</p>
+                </div>
+
+                <!-- Puzzle content (hidden by default) -->
+                <div id="puzzle-content" style="display:none;">
+                    <div id="puzzle-header">
+                        <span id="puzzle-room-name">Room 1 - The Lobby</span>
+                        <span id="puzzle-points">10 pts</span>
+                    </div>
+
+                    <h3 id="question-text">Question goes here</h3>
+
+                    <div id="options">
+                        <!-- Options are filled by JavaScript -->
+                    </div>
+
+                    <button id="hint-btn" onclick="showHint()">&#128161; Show Hint (-5 pts)</button>
+                    <p id="hint-text" style="display:none;"></p>
+
+                    <!-- Feedback message -->
+                    <div id="feedback" style="display:none;"></div>
+                </div>
+
+                <!-- Room completed message -->
+                <div id="puzzle-completed" style="display:none;">
+                    <h3>&#9989; Room Completed!</h3>
+                    <p id="completed-msg"></p>
+                    <p>Select another unlocked room from the map to continue.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SCREEN 3: RESULT SCREEN                      -->
+    <!-- ============================================ -->
+    <div id="result-screen" class="screen" style="display:none;">
+        <div class="result-container">
+            <h1>&#127881; Game Over!</h1>
+
+            <div id="result-summary">
+                <div class="result-stat">
+                    <span class="stat-label">Final Score</span>
+                    <span class="stat-value" id="final-score">0</span>
+                </div>
+                <div class="result-stat">
+                    <span class="stat-label">Rooms Completed</span>
+                    <span class="stat-value" id="final-rooms">0 / 9</span>
+                </div>
+                <div class="result-stat">
+                    <span class="stat-label">Time Spent</span>
+                    <span class="stat-value" id="final-time">0:00</span>
+                </div>
+            </div>
+
+            <h3>Completion History (most recent first)</h3>
+            <div id="history-list">
+                <!-- Filled by JavaScript from the Stack -->
+            </div>
+
+            <button id="replay-btn" onclick="location.reload()">&#128260; Play Again</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
